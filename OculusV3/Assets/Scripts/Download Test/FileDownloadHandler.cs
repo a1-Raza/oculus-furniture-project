@@ -4,20 +4,30 @@ using System.Net.Http;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
+using GLTFast;
 
 public class FileDownloadHandler : MonoBehaviour
 {
+    [SerializeField] GameObject gltfLoader;
+    [SerializeField] TMP_InputField inputGLTFURL;
+
     [SerializeField] TMP_InputField inputURL;
 
-    //static readonly string _destinationFolder = "@\"C:\\path\\to\\destination\\folder\"";
-    static readonly string _destinationFolder = "C:\\Users\\abdur\\Documents\\OculusFurnitureDownloadedAssets";
-    static readonly string _destinationUSDZ = "\\usdz";
-    static readonly string _destinationBundles = "\\bundles";
+    //readonly string objPath = "C:\\Users\\abdur\\Documents\\OculusFurnitureDownloadedAssets\\usdz\\Nissan_350Z.obj";
+
+    public readonly string _downloadUrl = "http://192.168.1.21:5000/download";
+    public string _destinationFolder;
+
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        _destinationFolder = Path.Combine(Application.persistentDataPath, "glb");
+    }
 
+    private void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -26,22 +36,24 @@ public class FileDownloadHandler : MonoBehaviour
 
     }
 
-    public void DownloadFromURLTextbox()
+
+    public void DownloadGLBModel(string modelname, string modelid)
     {
-        Debug.Log(inputURL.text);
-        DownloadFromURL(inputURL.text);
+        DownloadFromURL(_downloadUrl, modelname, modelid);
     }
 
-    public static async void DownloadFromURL(string url)
+    async void DownloadFromURL(string url, string modelname, string modelid)
     {
-        string downloadUrl = url; // The URL of the file to download
-        string destinationFolder = _destinationFolder + _destinationUSDZ; // The destination folder
-
+        string downloadUrl = url + "/" + modelname + "/" + modelid + ".glb";
         // Ensure the destination folder exists
-        if (!Directory.Exists(destinationFolder)) Directory.CreateDirectory(destinationFolder);
+        if (!Directory.Exists(_destinationFolder)) Directory.CreateDirectory(_destinationFolder);
+
+        Uri downloadUri = new Uri(downloadUrl);
+        string folderName = Path.GetDirectoryName(downloadUri.AbsolutePath).Replace("/download/", "").Replace("\\download\\", "");
+        if (!Directory.Exists(Path.Combine(_destinationFolder, folderName))) Directory.CreateDirectory(Path.Combine(_destinationFolder, folderName));
 
         string fileName = Path.GetFileName(downloadUrl); // Get the file name from the URL
-        string destinationPath = Path.Combine(destinationFolder, fileName); // Combine the folder and file name
+        string destinationPath = Path.Combine(_destinationFolder, folderName, fileName); // Combine the folder and file name
 
         try
         {
@@ -55,38 +67,42 @@ public class FileDownloadHandler : MonoBehaviour
                     await response.Content.CopyToAsync(fs);
                     Debug.Log("Download completed. File saved to " + destinationPath);
                 }
-
-                CreateAssetBundle(destinationPath);
             }
         }
         catch (Exception ex)
         {
             Debug.LogError("An error occurred: " + ex.Message);
+            return;
         }
     }
-
-    public static void CreateAssetBundle(string externalFilePath)
+    public int LoadExternalGLB(string modelname, string modelid)
     {
-        string fileName = Path.GetFileNameWithoutExtension(externalFilePath);
-        string tempPath = "Assets/Temp/" + Path.GetFileName(externalFilePath);
-        File.Copy(externalFilePath, tempPath, true);
-        AssetDatabase.ImportAsset(tempPath);
-        UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(tempPath);
+        return LoadExternalGLB(Path.Combine(_destinationFolder, modelname, modelid + ".glb"));
+    }
 
-        //string externalBundleDirectory = Path.Combine(Application.persistentDataPath, "AssetBundles");
-        string externalBundleDirectory = _destinationFolder + _destinationBundles;
-        if (!Directory.Exists(externalBundleDirectory))
+    int LoadExternalGLB(string path)
+    {
+        if (!File.Exists(path))
         {
-            Directory.CreateDirectory(externalBundleDirectory);
+            Debug.LogWarning("File doesn't exist at path: " + path);
+            return 1;
         }
+        try
+        {
+            gltfLoader.GetComponent<GltfAsset>().Url = path;
+            GameObject newGltf = Instantiate(gltfLoader);
+        }
+        catch (Exception ex) 
+        {
+            Debug.LogError("Exception when loading model: " + ex.Message);
+            return 2;
+        }
+        return 0;
+    }
 
-        AssetBundleBuild buildMap = new AssetBundleBuild();
-        buildMap.assetBundleName = fileName + ".bundle";
-        buildMap.assetNames = new[] { tempPath };
-
-        BuildPipeline.BuildAssetBundles(externalBundleDirectory, new[] { buildMap }, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
-
-        AssetDatabase.DeleteAsset(tempPath);
-        AssetDatabase.Refresh();
+    public bool ModelExistsAtPath(string modelname, string modelid)
+    {
+        string path = Path.Combine(_destinationFolder, modelname, modelid + ".glb");
+        return File.Exists(path);
     }
 }
