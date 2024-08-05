@@ -6,6 +6,8 @@ public class GLBRuntimeLoader : MonoBehaviour
 {
     List<List<string>> modelInfoList; // will change how this is set later, for now am hardcoding; template is {modelname, modelid}
 
+    [SerializeField] Transform spawnLocation;
+
     [SerializeField] GameObject scrollViewContent;
     [SerializeField] GameObject modelViewButtonPrefab;
     [SerializeField] List<GameObject> modelViewButtons; // serialized for debug

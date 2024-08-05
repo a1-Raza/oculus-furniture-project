@@ -2,16 +2,17 @@ using System;
 using System.IO;
 using System.Net.Http;
 using UnityEngine;
-using TMPro;
-using UnityEditor;
 using GLTFast;
+using System.Collections.Generic;
 
 public class FileDownloadHandler : MonoBehaviour
 {
-    [SerializeField] GameObject gltfLoader;
-    [SerializeField] TMP_InputField inputGLTFURL;
 
-    [SerializeField] TMP_InputField inputURL;
+    [SerializeField] bool poc1 = false;
+
+    [SerializeField] GameObject gltfLoader;
+
+    List<GameObject> modelsInScene;
 
     //readonly string objPath = "C:\\Users\\abdur\\Documents\\OculusFurnitureDownloadedAssets\\usdz\\Nissan_350Z.obj";
 
@@ -37,12 +38,12 @@ public class FileDownloadHandler : MonoBehaviour
     }
 
 
-    public void DownloadGLBModel(string modelname, string modelid)
+    public void DownloadGLBModel(string modelname, string modelid, bool loadDownloadedModel)
     {
-        DownloadFromURL(_downloadUrl, modelname, modelid);
+        DownloadFromURL(_downloadUrl, modelname, modelid, loadDownloadedModel);
     }
 
-    async void DownloadFromURL(string url, string modelname, string modelid)
+    async void DownloadFromURL(string url, string modelname, string modelid, bool loadDownloadedModel)
     {
         string downloadUrl = url + "/" + modelname + "/" + modelid + ".glb";
         // Ensure the destination folder exists
@@ -71,9 +72,11 @@ public class FileDownloadHandler : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError("An error occurred: " + ex.Message);
+            Debug.LogError(gameObject.name + " - An error occurred: " + ex.Message);
             return;
         }
+
+        if (loadDownloadedModel) LoadExternalGLB(modelname, modelid);
     }
     public int LoadExternalGLB(string modelname, string modelid)
     {

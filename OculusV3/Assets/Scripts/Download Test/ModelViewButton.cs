@@ -13,10 +13,18 @@ public class ModelViewButton : MonoBehaviour
     [SerializeField] TMP_Text buttonNameText;
     [SerializeField] TMP_Text buttonIDText;
 
+    [SerializeField] GameObject downloadIcon;
+
+    private void Awake()
+    {
+        downloadIcon.SetActive(true);
+        fileDownloadHandler = FindAnyObjectByType<FileDownloadHandler>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        fileDownloadHandler = FindFirstObjectByType<FileDownloadHandler>();
+        SetDownloadIcon();
     }
 
     // Update is called once per frame
@@ -27,11 +35,11 @@ public class ModelViewButton : MonoBehaviour
 
     public void ShowModel()
     {
-        int errorCode = fileDownloadHandler.LoadExternalGLB(modelname, modelid);
-        if (errorCode != 0)
-        {
-            fileDownloadHandler.DownloadGLBModel(modelname, modelid);
-        }
+        int errorCode = 0;
+        if (fileDownloadHandler.ModelExistsAtPath(modelname, modelid)) errorCode = fileDownloadHandler.LoadExternalGLB(modelname, modelid);
+        else fileDownloadHandler.DownloadGLBModel(modelname, modelid, true);
+        //if (errorCode != 0) fileDownloadHandler.DownloadGLBModel(modelname, modelid, true);
+        StartCoroutine(WaitSetDownloadIcon());
     }
 
     public void SetModelInfo(string name, string id)
@@ -40,5 +48,25 @@ public class ModelViewButton : MonoBehaviour
         modelid = id;
         buttonNameText.text = modelname.Replace("_", " ");
         buttonIDText.text = id;
+
+        SetDownloadIcon();
+    }
+
+    IEnumerator WaitSetDownloadIcon()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        if (!fileDownloadHandler.ModelExistsAtPath(modelname, modelid)) downloadIcon.SetActive(true);
+        else downloadIcon.SetActive(false);
+    }
+
+    void SetDownloadIcon()
+    {
+        if (!fileDownloadHandler.ModelExistsAtPath(modelname, modelid)) downloadIcon.SetActive(true);
+        else downloadIcon.SetActive(false);
+    }
+
+    void SetDownloadIcon(bool tf)
+    {
+        downloadIcon.SetActive(tf);
     }
 }
