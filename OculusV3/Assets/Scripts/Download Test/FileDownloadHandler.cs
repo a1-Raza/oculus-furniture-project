@@ -8,7 +8,9 @@ using System.Collections.Generic;
 public class FileDownloadHandler : MonoBehaviour
 {
 
-    [SerializeField] bool poc1 = false;
+    public bool _poc1 = false;
+    public Vector3 _poc1Position = new Vector3(0, 0, 3);
+    public Vector3 _poc1Rotation = new Vector3(0, 180, 0);
 
     [SerializeField] GameObject gltfLoader;
 
@@ -28,7 +30,7 @@ public class FileDownloadHandler : MonoBehaviour
 
     private void Start()
     {
-        
+        modelsInScene = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -37,13 +39,17 @@ public class FileDownloadHandler : MonoBehaviour
 
     }
 
+    public void DownloadGLBModel(string modelname, string modelid, Vector3 spawnPos, Vector3 rotation)
+    {
+        DownloadFromURL(_downloadUrl, modelname, modelid, true, spawnPos, rotation);
+    }
 
     public void DownloadGLBModel(string modelname, string modelid, bool loadDownloadedModel)
     {
-        DownloadFromURL(_downloadUrl, modelname, modelid, loadDownloadedModel);
+        DownloadFromURL(_downloadUrl, modelname, modelid, loadDownloadedModel, Vector3.zero, Vector3.zero);
     }
 
-    async void DownloadFromURL(string url, string modelname, string modelid, bool loadDownloadedModel)
+    async void DownloadFromURL(string url, string modelname, string modelid, bool loadDownloadedModel, Vector3 spawnPos, Vector3 rotation)
     {
         string downloadUrl = url + "/" + modelname + "/" + modelid + ".glb";
         // Ensure the destination folder exists
@@ -76,14 +82,20 @@ public class FileDownloadHandler : MonoBehaviour
             return;
         }
 
-        if (loadDownloadedModel) LoadExternalGLB(modelname, modelid);
-    }
-    public int LoadExternalGLB(string modelname, string modelid)
-    {
-        return LoadExternalGLB(Path.Combine(_destinationFolder, modelname, modelid + ".glb"));
+        if (loadDownloadedModel) LoadExternalGLB(modelname, modelid, spawnPos, rotation);
     }
 
-    int LoadExternalGLB(string path)
+    public int LoadExternalGLB(string modelname, string modelid, Vector3 spawnPos, Vector3 rotation)
+    {
+        return LoadExternalGLB(Path.Combine(_destinationFolder, modelname, modelid + ".glb"), spawnPos, rotation);
+    }
+
+    public int LoadExternalGLB(string modelname, string modelid)
+    {
+        return LoadExternalGLB(Path.Combine(_destinationFolder, modelname, modelid + ".glb"), Vector3.zero, Vector3.zero);
+    }
+
+    int LoadExternalGLB(string path, Vector3 spawnPos, Vector3 rotation)
     {
         if (!File.Exists(path))
         {
@@ -93,7 +105,9 @@ public class FileDownloadHandler : MonoBehaviour
         try
         {
             gltfLoader.GetComponent<GltfAsset>().Url = path;
-            GameObject newGltf = Instantiate(gltfLoader);
+            GameObject newGltf = Instantiate(gltfLoader, spawnPos, Quaternion.identity);
+            newGltf.transform.eulerAngles = rotation;
+            modelsInScene.Add(newGltf);
         }
         catch (Exception ex) 
         {
@@ -107,5 +121,15 @@ public class FileDownloadHandler : MonoBehaviour
     {
         string path = Path.Combine(_destinationFolder, modelname, modelid + ".glb");
         return File.Exists(path);
+    }
+
+    public void DeleteAllModelsInScene()
+    {
+        for (int i = modelsInScene.Count-1; i >= 0; i--)
+        {
+            GameObject toDestroy = modelsInScene[i];
+            modelsInScene.RemoveAt(i);
+            Destroy(toDestroy);
+        }
     }
 }

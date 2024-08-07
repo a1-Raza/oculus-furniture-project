@@ -203,37 +203,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   sortOrder: 0
---- !u!1 &149337088
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 149337089}
-  m_Layer: 0
-  m_Name: SpawnLocation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &149337089
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149337088}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &375763322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -431,7 +400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8138610747746149613, guid: fbca8b586ef78354cadd1f61776c6e70, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 8138610747746149613, guid: fbca8b586ef78354cadd1f61776c6e70, type: 3}
       propertyPath: m_LocalRotation.w
@@ -468,6 +437,14 @@ PrefabInstance:
     - target: {fileID: 8138610747746149613, guid: fbca8b586ef78354cadd1f61776c6e70, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163449359424317472, guid: fbca8b586ef78354cadd1f61776c6e70, type: 3}
+      propertyPath: m_Inertia
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163449359424317472, guid: fbca8b586ef78354cadd1f61776c6e70, type: 3}
+      propertyPath: m_DecelerationRate
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -643,9 +620,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2884829650664136946, guid: 7203282931cc0a24cb29527078362d77, type: 3}
+      propertyPath: _poc1
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884829650664136946, guid: 7203282931cc0a24cb29527078362d77, type: 3}
       propertyPath: spawnLocation
       value: 
-      objectReference: {fileID: 149337089}
+      objectReference: {fileID: 0}
+    - target: {fileID: 2884829650664136946, guid: 7203282931cc0a24cb29527078362d77, type: 3}
+      propertyPath: _poc1Position.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5442960190271602790, guid: 7203282931cc0a24cb29527078362d77, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -817,4 +802,3 @@ SceneRoots:
   - {fileID: 523337878}
   - {fileID: 578362364}
   - {fileID: 1905522634}
-  - {fileID: 149337089}

@@ -6,11 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ItemPlacerScene.unity
-    guid: c2d7285467fc1a54b864f25039b42a72
-  - enabled: 0
-    path: Assets/Scenes/WallCreatorScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/POC1VoidRoom.unity
+    guid: 9ed2e9be678595e42a882ff0d438e9a7
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7feca0a34bcc5e44ea37ce2f1f755007, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 37c9c324f779fdf448d5f12d2ab2f23a, type: 2}
+  m_UseUCBPForAssetBundles: 0
