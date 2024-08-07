@@ -132,4 +132,33 @@ public class FileDownloadHandler : MonoBehaviour
             Destroy(toDestroy);
         }
     }
+
+    public void DeleteAllDownloadedModels()
+    {
+        DeleteAllDownloadedModels(_destinationFolder);
+    }
+
+    void DeleteAllDownloadedModels(string folderPath)
+    {
+        if (!Directory.Exists(folderPath)) return;
+
+        string[] files = Directory.GetFiles(folderPath);
+
+        foreach (string file in files)
+        {
+            File.SetAttributes(file, FileAttributes.Normal);
+            File.Delete(file);
+        }
+
+        // Get all subdirectories
+        string[] directories = Directory.GetDirectories(folderPath);
+
+        // Delete all subdirectories and their contents
+        foreach (string directory in directories)
+        {
+            DeleteAllDownloadedModels(directory);
+        }
+
+        Directory.Delete(folderPath, false);
+    }
 }
