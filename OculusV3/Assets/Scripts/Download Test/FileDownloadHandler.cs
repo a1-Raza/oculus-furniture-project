@@ -18,7 +18,7 @@ public class FileDownloadHandler : MonoBehaviour
 
     //readonly string objPath = "C:\\Users\\abdur\\Documents\\OculusFurnitureDownloadedAssets\\usdz\\Nissan_350Z.obj";
 
-    public readonly string _downloadUrl = "http://192.168.1.21:5000/download";
+    public string _downloadUrl;
     public string _destinationFolder;
 
 
@@ -26,6 +26,7 @@ public class FileDownloadHandler : MonoBehaviour
     void Awake()
     {
         _destinationFolder = Path.Combine(Application.persistentDataPath, "glb");
+        _downloadUrl = FindAnyObjectByType<ConnectionHandler>().GetDownloadUrl();
     }
 
     private void Start()
@@ -37,6 +38,11 @@ public class FileDownloadHandler : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void DownloadGLBModel(string modelname, string modelid, bool loadDownloadedModel, Vector3 spawnPos, Vector3 rotation)
+    {
+        DownloadFromURL(_downloadUrl, modelname, modelid, loadDownloadedModel, spawnPos, rotation);
     }
 
     public void DownloadGLBModel(string modelname, string modelid, Vector3 spawnPos, Vector3 rotation)
