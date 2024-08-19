@@ -12,7 +12,7 @@ public class ConnectionHandler : MonoBehaviour
     readonly string _apiPOC2Jsons = "get/poc2/templates/";
     string _poc2JsonDestinationFolder;
 
-    static string latestJsonResponse;
+    static string latestJsonResponse = null;
 
 
     private void Awake()
@@ -38,10 +38,10 @@ public class ConnectionHandler : MonoBehaviour
 
     public string GetLatestJsonResponse() { return latestJsonResponse; }
 
-    public async void DownloadTemplateJson(string templateFileName)
+    public async void GetTemplateJson(string templateFileName)
     {
         string apiUrl = GetPOC2JsonsUrl() + templateFileName.Replace(".json", "") + ".json";
-        Debug.Log(apiUrl);
+        //Debug.Log(apiUrl);
 
         using (HttpClient client = new HttpClient())
         {
@@ -55,9 +55,9 @@ public class ConnectionHandler : MonoBehaviour
 
                 // Read the JSON content from the response
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                latestJsonResponse = jsonResponse;
-                /*Debug.Log($"{jsonResponse}");
-
+                if (jsonResponse != null) latestJsonResponse = jsonResponse;
+                //Debug.Log($"{jsonResponse}");
+                /*
                 // Save the JSON response to a file
                 File.WriteAllText(_poc2JsonDestinationFolder, jsonResponse);
 

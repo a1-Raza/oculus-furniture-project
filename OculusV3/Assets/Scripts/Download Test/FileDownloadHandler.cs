@@ -39,7 +39,10 @@ public class FileDownloadHandler : MonoBehaviour
     {
 
     }
-
+    public void DownloadGLBModel(string modelname, string modelid)
+    {
+        DownloadFromURL(_downloadUrl, modelname, modelid, false, Vector3.zero, Vector3.zero);
+    }
     public void DownloadGLBModel(string modelname, string modelid, bool loadDownloadedModel, Vector3 spawnPos, Vector3 rotation)
     {
         DownloadFromURL(_downloadUrl, modelname, modelid, loadDownloadedModel, spawnPos, rotation);
@@ -57,7 +60,8 @@ public class FileDownloadHandler : MonoBehaviour
 
     async void DownloadFromURL(string url, string modelname, string modelid, bool loadDownloadedModel, Vector3 spawnPos, Vector3 rotation)
     {
-        string downloadUrl = url + "/" + modelname + "/" + modelid + ".glb";
+        string slash = (url[url.Length - 1] == '/') ? "" : "/";
+        string downloadUrl = url + slash + modelname + "/" + modelid.Replace(".glb", "") + ".glb";
         // Ensure the destination folder exists
         if (!Directory.Exists(_destinationFolder)) Directory.CreateDirectory(_destinationFolder);
 
@@ -123,9 +127,31 @@ public class FileDownloadHandler : MonoBehaviour
         return 0;
     }
 
+    public GameObject GetExternalGLBGameObject(string modelname, string modelid, Transform parent)
+    {
+        string path = Path.Combine(_destinationFolder, modelname, modelid.Replace(".glb", "") + ".glb");
+        GameObject glbObject = null;
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning("File doesn't exist at path: " + path);
+            return glbObject;
+        }
+        try
+        {
+            gltfLoader.GetComponent<GltfAsset>().Url = path;
+            glbObject = Instantiate(gltfLoader, parent);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Exception when loading model: " + ex.Message);
+            return glbObject;
+        }
+        return glbObject;
+    }
+
     public bool ModelExistsAtPath(string modelname, string modelid)
     {
-        string path = Path.Combine(_destinationFolder, modelname, modelid + ".glb");
+        string path = Path.Combine(_destinationFolder, modelname, modelid.Replace(".glb", "") + ".glb"); 
         return File.Exists(path);
     }
 
