@@ -129,6 +129,11 @@ public class FileDownloadHandler : MonoBehaviour
 
     public GameObject GetExternalGLBGameObject(string modelname, string modelid, Transform parent)
     {
+        return GetExternalGLBGameObject(gltfLoader, modelname, modelid, parent);
+    }
+
+    public GameObject GetExternalGLBGameObject(GameObject gltfAssetPrefab, string modelname, string modelid, Transform parent)
+    {
         string path = Path.Combine(_destinationFolder, modelname, modelid.Replace(".glb", "") + ".glb");
         GameObject glbObject = null;
         if (!File.Exists(path))
@@ -138,8 +143,8 @@ public class FileDownloadHandler : MonoBehaviour
         }
         try
         {
-            gltfLoader.GetComponent<GltfAsset>().Url = path;
-            glbObject = Instantiate(gltfLoader, parent);
+            gltfAssetPrefab.GetComponent<GltfAsset>().Url = path;
+            glbObject = Instantiate(gltfAssetPrefab, parent);
         }
         catch (Exception ex)
         {
@@ -192,5 +197,10 @@ public class FileDownloadHandler : MonoBehaviour
         }
 
         Directory.Delete(folderPath, false);
+    }
+
+    public string GetModelPath(string modelname, string modelid)
+    {
+        return Path.Combine(_destinationFolder, modelname, modelid.Replace(".glb", "") + ".glb");
     }
 }

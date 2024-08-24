@@ -10,9 +10,7 @@ using Unity.VisualScripting;
 public class TemplateObjectsController : MonoBehaviour
 {
     public string template = "bedroom";
-
-    [SerializeField] string[] fileUrls;
-    [SerializeField] GltfAsset[] gltfAssets;
+    public GameObject templateObject;
 
     ConnectionHandler connectionHandler;
     FileDownloadHandler fileDownloadHandler;
@@ -63,22 +61,46 @@ public class TemplateObjectsController : MonoBehaviour
             newPos.transform.position = new Vector3(item.world_pos[0], item.world_pos[1], item.world_pos[2]);
             newPos.transform.eulerAngles = new Vector3(item.euler_angles[0], item.euler_angles[1], item.euler_angles[2]);
 
-            if (!fileDownloadHandler.ModelExistsAtPath(item.default_model.name, item.default_model.file))
+            /*if (!fileDownloadHandler.ModelExistsAtPath(item.default_model.name, item.default_model.file))
             {
-                StartCoroutine(DownloadAndLoadGLB(item.default_model.name, item.default_model.file, newPos.transform));
+                StartCoroutine(DownloadAndLoadGLB(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models));
             }
             else
             {
-                fileDownloadHandler.GetExternalGLBGameObject(item.default_model.name, item.default_model.file, newPos.transform);
-            }
+                GetExternalGLBAndAssignValidModels(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models);
+            }*/
+
+            SetTemplateObject(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models);
         }
     }
 
-    IEnumerator DownloadAndLoadGLB(string modelname, string modelid, Transform parent)
+    IEnumerator DownloadAndLoadGLB(GameObject templateobject, string modelname, string modelid, Transform parent, List<ValidModel> validmodellist)
     {
         fileDownloadHandler.DownloadGLBModel(modelname, modelid);
         yield return new WaitForSecondsRealtime(1);
-        fileDownloadHandler.GetExternalGLBGameObject(modelname, modelid, parent);
+        GetExternalGLBAndAssignValidModels(templateobject, modelname, modelid, parent, validmodellist);
+        
+    }
+
+    void GetExternalGLBAndAssignValidModels(GameObject templateobject, string modelname, string modelid, Transform parent, List<ValidModel> validmodellist)
+    {
+        GameObject modelObject = fileDownloadHandler.GetExternalGLBGameObject(templateobject, modelname, modelid, parent);
+        //templateObject.GetComponent<GltfAsset>().Url = fileDownloadHandler.GetModelPath(modelname, modelid);
+        if (!modelObject || modelObject == null) return;
+
+        if (validmodellist != null) modelObject.GetComponent<TemplateObject>().SetValidModelsList(validmodellist);
+    }
+
+    public void SetTemplateObject(GameObject templateobject, string modelname, string modelid, Transform parent, List<ValidModel> validmodellist)
+    {
+        if (!fileDownloadHandler.ModelExistsAtPath(modelname, modelid))
+        {
+            StartCoroutine(DownloadAndLoadGLB(templateobject, modelname, modelid, parent, validmodellist));
+        }
+        else
+        {
+            GetExternalGLBAndAssignValidModels(templateobject, modelname, modelid, parent, validmodellist);
+        }
     }
 }
 

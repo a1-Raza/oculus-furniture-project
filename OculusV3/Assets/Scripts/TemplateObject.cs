@@ -6,21 +6,26 @@ using UnityEngine;
 
 public class TemplateObject : MonoBehaviour
 {
-    [SerializeField] GameObject collideTestObject; // rename to menu or something when working on menu
+    [SerializeField] GameObject modelMenuObject; // rename to menu or something when working on menu
+    GameObject modelChildObject;
 
-    float initialTime;
+    List<ValidModel> validModels = new List<ValidModel>();
+
+    //float initialTime;
     bool modelRenderedSuccessfully;
 
     MeshCollider modelCollider;
     RayInteractable modelRayInteractable;
     ColliderSurface modelColliderSurface;
 
+    TemplateObjectsController templateObjectsController;
+
     // Start is called before the first frame update
     void Start()
     {
-        collideTestObject.SetActive(false);
+        templateObjectsController = FindAnyObjectByType<TemplateObjectsController>();
+        modelMenuObject.SetActive(false);
         modelRenderedSuccessfully = false;
-        initialTime = Time.time;
         StartCoroutine(AddColliderToModelChild());
     }
 
@@ -31,31 +36,70 @@ public class TemplateObject : MonoBehaviour
 
         if (modelRayInteractable.SelectingInteractors.Count > 0)
         {
-            collideTestObject.SetActive(true);
+            modelMenuObject.SetActive(true);
         }
-        else collideTestObject.SetActive(false);
     }
 
     IEnumerator AddColliderToModelChild()
     {
+        float initialTime = Time.time;
+        modelRenderedSuccessfully = false;
         yield return new WaitUntil(() => transform.childCount > 1 || Mathf.Abs(Time.time - initialTime) > 5f);
         if (Mathf.Abs(Time.time - initialTime) > 5f) yield break;
 
         yield return new WaitForSecondsRealtime(0.25f);
-        GameObject modelChild = transform.GetChild(1).gameObject;
+        modelChildObject = transform.GetChild(1).gameObject;
 
-        modelChild.AddComponent<MeshCollider>();
-        modelChild.AddComponent<RayInteractable>();
-        modelChild.AddComponent<ColliderSurface>();
+        modelChildObject.AddComponent<MeshCollider>();
+        modelChildObject.AddComponent<RayInteractable>();
+        modelChildObject.AddComponent<ColliderSurface>();
 
-        modelCollider = modelChild.GetComponent<MeshCollider>();
-        modelRayInteractable = modelChild.GetComponent<RayInteractable>();
-        modelColliderSurface = modelChild.GetComponent<ColliderSurface>();
+        modelCollider = modelChildObject.GetComponent<MeshCollider>();
+        modelRayInteractable = modelChildObject.GetComponent<RayInteractable>();
+        modelColliderSurface = modelChildObject.GetComponent<ColliderSurface>();
 
         modelColliderSurface.InjectCollider(modelCollider);
         modelRayInteractable.InjectSurface(modelColliderSurface);
 
         //collideTestObject = Instantiate(collideTestObject, gameObject.transform);
         modelRenderedSuccessfully = true;
+    }
+
+    public void SetValidModelsList(List<ValidModel> input)
+    {
+        validModels = input;
+    }
+
+    public List<ValidModel> GetValidModelsList()
+    {
+        return validModels;
+    }
+
+    public void ChangeModel(string modelname, string modelid)
+    {
+        ValidModel newModel = null;
+        foreach (ValidModel model in validModels)
+        {
+            if (model.name == modelname)
+            {
+                newModel = model;
+                break;
+            }
+        }
+        if (newModel == null) return;
+
+        string newId = null;
+        foreach (string id in newModel.files)
+        {
+            if (id == modelid) 
+            {
+                newId = id;
+                break;
+            }
+        }
+        if (newId == null) return;
+
+        templateObjectsController.SetTemplateObject(templateObjectsController.templateObject, modelname, modelid, transform.parent, validModels);
+        Destroy(gameObject);
     }
 }
