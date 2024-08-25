@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class TemplateObject : MonoBehaviour
 {
-    [SerializeField] GameObject modelMenuObject; // rename to menu or something when working on menu
+    [SerializeField] GameObject modelMenuObject;
     GameObject modelChildObject;
 
-    List<ValidModel> validModels = new List<ValidModel>();
+    List<ValidModel> validModels;
 
     //float initialTime;
     bool modelRenderedSuccessfully;
@@ -48,7 +48,7 @@ public class TemplateObject : MonoBehaviour
         if (Mathf.Abs(Time.time - initialTime) > 5f) yield break;
 
         yield return new WaitForSecondsRealtime(0.25f);
-        modelChildObject = transform.GetChild(1).gameObject;
+        modelChildObject = GetChildWithMesh(transform.GetChild(1).gameObject);
 
         modelChildObject.AddComponent<MeshCollider>();
         modelChildObject.AddComponent<RayInteractable>();
@@ -63,6 +63,12 @@ public class TemplateObject : MonoBehaviour
 
         //collideTestObject = Instantiate(collideTestObject, gameObject.transform);
         modelRenderedSuccessfully = true;
+    }
+
+    GameObject GetChildWithMesh(GameObject child)
+    {
+        if (child.GetComponent<MeshRenderer>()) return child;
+        return GetChildWithMesh(child.transform.GetChild(0).gameObject);
     }
 
     public void SetValidModelsList(List<ValidModel> input)

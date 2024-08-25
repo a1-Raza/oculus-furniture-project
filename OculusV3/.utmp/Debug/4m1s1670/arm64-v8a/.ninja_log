@@ -1,11 +1,21 @@
 # ninja log v5
 37	283	7447127067679273	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	35c1a8b953014661
+7	824	7447127073475577	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	17c5bfafd2921ee9
+1	707	7447127072224496	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	87ba8b344529ed0a
 285	480	7447127069327959	C:/Users/abdur/Documents/Unity Projects/oculus-furniture-project/OculusV3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4m1s1670/obj/arm64-v8a/libswappywrapper.so	8123ceb360397ef1
 16	673	7447127072039730	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	37f356586c3ec339
-20	685	7447127072150057	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	4c109a764c7228d3
-1	707	7447127072224496	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	87ba8b344529ed0a
-31	725	7447127072379852	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	ffff60b4b80582db
 11	735	7447127072638920	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	14ff8a1441ff653f
+20	685	7447127072150057	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	4c109a764c7228d3
+31	725	7447127072379852	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	ffff60b4b80582db
 25	779	7447127073097079	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	56955dabfacbb0f1
-7	824	7447127073475577	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	17c5bfafd2921ee9
 825	947	7447127074381284	C:/Users/abdur/Documents/Unity Projects/oculus-furniture-project/OculusV3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4m1s1670/obj/arm64-v8a/libgame.so	86b09ab4b9c7cad9
+42	293	7463253860688425	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	35c1a8b953014661
+293	608	7463253863360835	C:/Users/abdur/Documents/Unity Projects/oculus-furniture-project/OculusV3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4m1s1670/obj/arm64-v8a/libswappywrapper.so	8123ceb360397ef1
+33	783	7463253865592213	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	37f356586c3ec339
+37	795	7463253865704362	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	4c109a764c7228d3
+28	811	7463253865876730	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	ffff60b4b80582db
+17	837	7463253866097251	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	14ff8a1441ff653f
+24	863	7463253866355191	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	87ba8b344529ed0a
+21	896	7463253866668854	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	56955dabfacbb0f1
+13	915	7463253866841666	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	17c5bfafd2921ee9
+915	1082	7463253867891271	C:/Users/abdur/Documents/Unity Projects/oculus-furniture-project/OculusV3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4m1s1670/obj/arm64-v8a/libgame.so	86b09ab4b9c7cad9
