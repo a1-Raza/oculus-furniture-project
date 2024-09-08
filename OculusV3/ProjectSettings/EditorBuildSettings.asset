@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/POC2BedroomTemplate.unity
-    guid: 92d103e51f360c948a362ce97e304b03
+    path: Assets/Scenes/POC3PhotorealisticRoom.unity
+    guid: b1bb3f45b0d74084a8b3b2347c6b6c2d
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7feca0a34bcc5e44ea37ce2f1f755007, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 37c9c324f779fdf448d5f12d2ab2f23a, type: 2}

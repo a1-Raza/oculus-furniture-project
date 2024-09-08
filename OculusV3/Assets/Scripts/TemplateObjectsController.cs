@@ -42,16 +42,11 @@ public class TemplateObjectsController : MonoBehaviour
 
     IEnumerator AwaitJsonAndSetupTemplate()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            templateJsonString = connectionHandler.GetLatestJsonResponse();
-            if (templateJsonString != null) break;
-            yield return new WaitForSecondsRealtime(1);
-        }
+        float initialTime = Time.time;
+        yield return new WaitUntil(() => (connectionHandler.GetLatestJsonResponse() != null && connectionHandler.GetLatestJsonResponse().Length > 0) || Mathf.Abs(Time.time - initialTime) > 5f);
+        if (connectionHandler.GetLatestJsonResponse() == null || connectionHandler.GetLatestJsonResponse().Length == 0) yield break;
+        
         templateJsonString = connectionHandler.GetLatestJsonResponse();
-
-        if (templateJsonString == null) yield break;
-
         List<JsonItem> jsonItems = JsonConvert.DeserializeObject<List<JsonItem>>(templateJsonString);
         foreach (JsonItem item in jsonItems)
         {
@@ -61,16 +56,8 @@ public class TemplateObjectsController : MonoBehaviour
             newPos.transform.position = new Vector3(item.world_pos[0], item.world_pos[1], item.world_pos[2]);
             newPos.transform.eulerAngles = new Vector3(item.euler_angles[0], item.euler_angles[1], item.euler_angles[2]);
 
-            /*if (!fileDownloadHandler.ModelExistsAtPath(item.default_model.name, item.default_model.file))
-            {
-                StartCoroutine(DownloadAndLoadGLB(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models));
-            }
-            else
-            {
-                GetExternalGLBAndAssignValidModels(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models);
-            }*/
-
             SetTemplateObject(templateObject, item.default_model.name, item.default_model.file, newPos.transform, item.valid_models);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
 
