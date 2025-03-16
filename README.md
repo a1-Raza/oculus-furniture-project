@@ -17,6 +17,3 @@ These are the features available in the latest "complete" POC:
 
 ### Building and Running + Bugs
 This project can be built the usual way Meta/Oculus Quest games are built, but note that the performance won't be great (although that could be because I'm testing on a heavily used Quest 2). You may experience stutters when trying to view a model you don't have as the headset downloads it, or due to the graphics (I experimented with at least semi-realistic visuals in POC3). I hope to fix those at some point!
-
-### Hiatus over soon
-This project has been on hiatus for a while, but I'll be picking it up again soon now that I'm on break!
